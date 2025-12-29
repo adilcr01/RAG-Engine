@@ -10,7 +10,20 @@
 * **Semantic Retrieval**: Leverages **FAISS** (Facebook AI Similarity Search) for high-performance vector matching, ensuring the most relevant document sections are found instantly.
 * **Source Citation**: Every response includes specific page references from the source document, ensuring transparency and trust.
 * **Hybrid Architecture**: Combines local high-speed vector storage with cloud-based LLM inference via the **Hugging Face Inference API**.
-* **Plug-and-Play**: Optimized for Python 3.12 with minimal dependencies and robust error handling.
+
+## ⚙️ Configuration
+
+To run this project, you need a Hugging Face API Token.
+
+1. Create a `.env` file in the **parent directory** of `ai_chat_project`.
+2. Add your token:
+   ```env
+   HUGGINGFACEHUB_API_TOKEN=your_token_here
+   ```
+
+### Default Models
+* **LLM**: `google/gemma-2-9b-it` (Optimized for text-generation)
+* **Embeddings**: `sentence-transformers/all-MiniLM-L6-v2`
 
 ## 🛠️ Technology Stack
 
@@ -20,6 +33,22 @@
 * **Vector Database**: FAISS (Local)
 * **Embeddings**: Hugging Face (sentence-transformers)
 * **Document Processing**: PyPDF
+
+## 🏃 Local Setup
+
+1. **Activate Environment**:
+   ```powershell
+   ..\ai_env\Scripts\activate
+   ```
+2. **Install Dependencies**:
+   ```powershell
+   pip install -r requirements.txt
+   ```
+3. **Run the Application**:
+   ```powershell
+   python main.py
+   ```
+4. **Access**: Open [http://localhost:8000](http://localhost:8000)
 
 ## 📖 How It Works
 
