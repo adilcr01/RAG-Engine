@@ -1,2 +1,4 @@
 faiss_index/
 db/
+uploads/
+__pycache__/

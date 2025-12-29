@@ -12,10 +12,8 @@ load_dotenv(r"..\.env")
 if not os.getenv("HUGGINGFACEHUB_API_TOKEN"):
     raise ValueError("HUGGINGFACEHUB_API_TOKEN not found in .env file")
 
-def ingest_docs():
-    pdf_path = r"..\Copy of Spring Hill - Nelly's Italian Cafe - Lease (Fully Executed) 01.17.14.pdf"
-    
-    print("Loading PDF...")
+def ingest_pdf(pdf_path: str, index_name: str = "faiss_index"):
+    print(f"Loading PDF from {pdf_path}...")
     loader = PyPDFLoader(pdf_path)
     documents = loader.load()
     print(f"Loaded {len(documents)} pages.")
@@ -31,16 +29,14 @@ def ingest_docs():
         model="sentence-transformers/all-MiniLM-L6-v2"
     )
     
-    # Save as FAISS index
-    index_name = "faiss_index"
-    
     vectorstore = FAISS.from_documents(
         documents=texts, 
         embedding=embeddings
     )
     vectorstore.save_local(index_name)
-    
     print(f"Ingestion complete. FAISS index saved to '{index_name}'.")
+    return len(texts)
 
 if __name__ == "__main__":
-    ingest_docs()
+    default_pdf = r"..\Copy of Spring Hill - Nelly's Italian Cafe - Lease (Fully Executed) 01.17.14.pdf"
+    ingest_pdf(default_pdf)

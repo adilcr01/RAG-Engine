@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG-Engine | AI Lease Assistant</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <h1>RAG-Engine</h1>
+                <p>Advanced Contextual Analysis</p>
+            </div>
+            
+            <div class="upload-section">
+                <div class="drop-zone" id="drop-zone">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <h3>Upload Lease PDF</h3>
+                    <p>Drag & drop or click to upload</p>
+                    <input type="file" id="file-input" hidden accept=".pdf">
+                </div>
+                <div id="file-status" style="margin-top: 1rem; font-size: 0.875rem; color: var(--text-muted);"></div>
+            </div>
+
+            <div class="info-section">
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; font-size: 0.8rem;">
+                    <p style="color: var(--primary); font-weight: 600; margin-bottom: 0.5rem;">How it works:</p>
+                    <p style="color: var(--text-muted); line-height: 1.4;">Push your lease document to the engine's semantic brain for deep Q&A.</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat -->
+        <main class="chat-main">
+            <div class="chat-messages" id="chat-messages">
+                <div class="message ai">
+                    Hello! I'm your RAG-Engine Assistant. Upload a lease document to get started, or ask me anything if the data is already synced.
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="input-container">
+                    <input type="text" id="chat-input" placeholder="Ask a question about your lease..." autocomplete="off">
+                    <button class="send-btn" id="send-btn">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Overlay -->
+        <div class="overlay" id="overlay">
+            <div class="loader"></div>
+            <h2 id="overlay-text">Syncing Knowledge...</h2>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Processing document chunks</p>
+        </div>
+    </div>
+
+    <script src="static/script.js"></script>
+</body>
+</html>
