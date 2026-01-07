@@ -6,7 +6,8 @@
 
 ## 🚀 Key Features
 
-* **Intelligent Knowledge Injection**: Automatically splits and embeds PDF documents to provide the LLM with relevant context for ogni query.
+* **Intelligent Knowledge Injection**: Automatically splits and embeds PDF documents to provide the LLM with relevant context for any query.
+* **OCR Support**: Built-in OCR using **RapidOCR** to handle image-based or scanned PDFs automatically.
 * **Semantic Retrieval**: Leverages **FAISS** (Facebook AI Similarity Search) for high-performance vector matching, ensuring the most relevant document sections are found instantly.
 * **Source Citation**: Every response includes specific page references from the source document, ensuring transparency and trust.
 * **Hybrid Architecture**: Combines local high-speed vector storage with cloud-based LLM inference via the **Hugging Face Inference API**.
@@ -15,24 +16,25 @@
 
 To run this project, you need a Hugging Face API Token.
 
-1. Create a `.env` file in the **parent directory** of `ai_chat_project`.
+1. Create a `.env` file in the **parent directory** of `ai_chat_project` (or update the one in the parent directory).
 2. Add your token:
    ```env
    HUGGINGFACEHUB_API_TOKEN=your_token_here
    ```
 
 ### Default Models
-* **LLM**: `google/gemma-2-9b-it` (Optimized for text-generation)
+* **LLM**: `mistralai/Mistral-7B-Instruct-v0.2` (Optimized for instruction following)
 * **Embeddings**: `sentence-transformers/all-MiniLM-L6-v2`
 
 ## 🛠️ Technology Stack
 
 * **Backend**: FastAPI (Python)
+* **OCR**: RapidOCR
 * **Frontend**: Vanilla HTML5, CSS3 (Glassmorphism), JavaScript (ES6+)
 * **LLM Integration**: LangChain & Hugging Face Endpoint
 * **Vector Database**: FAISS (Local)
 * **Embeddings**: Hugging Face (sentence-transformers)
-* **Document Processing**: PyPDF
+* **Document Processing**: PyMuPDF (fitz)
 
 ## 🏃 Local Setup
 
@@ -46,12 +48,12 @@ To run this project, you need a Hugging Face API Token.
    ```
 3. **Run the Application**:
    ```powershell
-   python main.py
+   uvicorn main:app --reload
    ```
 4. **Access**: Open [http://localhost:8000](http://localhost:8000)
 
 ## 📖 How It Works
 
-1. **Ingest**: `ingest.py` processes the PDF, creates semantic chunks, and builds a local FAISS index.
+1. **Ingest**: `ingest.py` processes the PDF using PyMuPDF and RapidOCR (if needed), creates semantic chunks, and builds a local FAISS index.
 2. **Retrieve**: When a user asks a question, the engine retrieves the top relevant context from the FAISS database.
 3. **Generate**: The engine pushes the retrieved knowledge along with the question to the LLM to generate a precise response.
