@@ -24,7 +24,12 @@
                     <p>Drag & drop or click to upload</p>
                     <input type="file" id="file-input" hidden accept=".pdf">
                 </div>
-                <div id="file-status" style="margin-top: 1rem; font-size: 0.875rem; color: var(--text-muted);"></div>
+                <div id="file-status-container" style="margin-top: 1rem; display: none; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 0.5rem 0.75rem; border-radius: 8px;">
+                    <div id="file-status" style="font-size: 0.875rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 0.5rem;"></div>
+                    <button id="remove-file-btn" title="Remove file and cache" style="background: none; border: none; color: #ef4444; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="info-section">

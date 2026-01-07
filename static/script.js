@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const dropZone = document.getElementById('drop_zone'); // Fix ID
     const fileInput = document.getElementById('file-input');
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
@@ -7,9 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = document.getElementById('overlay');
     const overlayText = document.getElementById('overlay-text');
     const fileStatus = document.getElementById('file-status');
+    const removeFileBtn = document.getElementById('remove-file-btn');
+    const fileStatusContainer = document.getElementById('file-status-container');
 
     // Drag & Drop Handlers
-    const realDropZone = document.getElementById('drop-zone'); // Re-selecting correctly
+    const realDropZone = document.getElementById('drop-zone');
     realDropZone.onclick = () => fileInput.click();
 
     fileInput.onchange = (e) => {
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const data = await response.json();
             if (data.status === 'success') {
-                fileStatus.innerText = `Synced: ${data.filename}`;
+                updateUIForSyncedFile(data.filename);
                 addMessage('ai', data.message);
             } else {
                 addMessage('ai', 'Error syncing file: ' + data.message);
@@ -54,6 +55,58 @@ document.addEventListener('DOMContentLoaded', () => {
             hideOverlay();
         }
     }
+
+    // Delete Handler
+    removeFileBtn.onclick = async () => {
+        if (!confirm('Are you sure you want to remove the uploaded file and clear its cache?')) return;
+
+        showOverlay('Removing Data...');
+        try {
+            const response = await fetch('/delete', {
+                method: 'POST'
+            });
+            const data = await response.json();
+            if (data.status === 'success') {
+                updateUIForDeletedFile();
+                addMessage('ai', data.message);
+            } else {
+                addMessage('ai', 'Error removing file: ' + data.message);
+            }
+        } catch (error) {
+            addMessage('ai', 'Connection error during removal.');
+        } finally {
+            hideOverlay();
+        }
+    };
+
+    // UI State Helpers
+    function updateUIForSyncedFile(filename) {
+        fileStatus.innerText = `Synced: ${filename}`;
+        fileStatusContainer.style.display = 'flex';
+        // Make sure it's actually visible in case of inherited styles
+        fileStatusContainer.style.visibility = 'visible';
+        fileStatusContainer.style.opacity = '1';
+    }
+
+    function updateUIForDeletedFile() {
+        fileStatus.innerText = '';
+        fileStatusContainer.style.display = 'none';
+    }
+
+    // Initial Status Check
+    async function checkStatus() {
+        try {
+            const response = await fetch('/status');
+            const data = await response.json();
+            if (data.status === 'synced') {
+                updateUIForSyncedFile(data.filename);
+            }
+        } catch (error) {
+            console.error('Error checking status:', error);
+        }
+    }
+
+    checkStatus();
 
     // Chat Handlers
     sendBtn.onclick = sendMessage;

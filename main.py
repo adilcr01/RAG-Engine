@@ -46,6 +46,45 @@ async def upload_file(file: UploadFile = File(...)):
     except Exception as e:
         return JSONResponse(content={"status": "error", "message": str(e)}, status_code=500)
 
+@app.post("/delete")
+async def delete_files():
+    try:
+        # Clear uploads directory
+        if os.path.exists(UPLOAD_DIR):
+            for filename in os.listdir(UPLOAD_DIR):
+                file_path = os.path.join(UPLOAD_DIR, filename)
+                try:
+                    if os.path.isfile(file_path) or os.path.islink(file_path):
+                        os.unlink(file_path)
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+                except Exception as e:
+                    print(f'Failed to delete {file_path}. Reason: {e}')
+        
+        # Clear FAISS index
+        if os.path.exists(INDEX_NAME):
+            shutil.rmtree(INDEX_NAME)
+        
+        # Re-initialize chat system to clear state
+        chat_system._initialize()
+        
+        return JSONResponse(content={
+            "status": "success",
+            "message": "Successfully removed document and cleared cache."
+        })
+    except Exception as e:
+        return JSONResponse(content={"status": "error", "message": str(e)}, status_code=500)
+
+@app.get("/status")
+async def get_status():
+    try:
+        files = os.listdir(UPLOAD_DIR)
+        if files:
+            return JSONResponse(content={"status": "synced", "filename": files[0]})
+        return JSONResponse(content={"status": "empty"})
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
 @app.post("/chat")
 async def chat_endpoint(query: str = Form(...)):
     try:
